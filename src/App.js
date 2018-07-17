@@ -31,16 +31,33 @@ class App extends Component {
   getVehicles() {
     // axios (GET)
     // setState with response -> vehiclesToDisplay
+    axios.get('https://joes-autos.herokuapp.com/api/vehicles').then(res => {
+      toast.success('Successfully got vehicles!')
+      this.setState({
+        vehiclesToDisplay: res.data 
+      })
+    }).catch( err => toast.error('Could not retrieve vehicles!'))
   }
 
   getPotentialBuyers() {
     // axios (GET)
     // setState with response -> buyersToDisplay
+    axios.get('https://joes-autos.herokuapp.com/api/buyers').then(res => {
+      toast.success('Successfully got Buyers!')
+      this.setState({
+        buyersToDisplay: res.data
+      })
+    }).catch( err => toast.error('Could not retrieve Buyers. :('))
   }
 
   sellCar(id) {
     // axios (DELETE)
     // setState with response -> vehiclesToDisplay
+    axios.delete('https://joes-autos.herokuapp.com/api/vehicles/${id}').then(res =>{
+      this.setState({
+        vehiclesToDisplay: res.data.vehicles
+      })
+    })
   }
 
   filterByMake() {
@@ -48,6 +65,11 @@ class App extends Component {
 
     // axios (GET)
     // setState with response -> vehiclesToDisplay
+    axios.get(`https://joes-autos.herokuapp.com/api/vehicles?make=${make}`).then(res => {
+     this.setState({
+       vehiclesToDisplay: res.data
+     })
+    })
   }
 
   filterByColor() {
@@ -55,11 +77,21 @@ class App extends Component {
 
     // axios (GET)
     // setState with response -> vehiclesToDisplay
+    axios.get(`https://joes-autos.herokuapp.com/api/vehicles?color=${color}`).then(res => {
+     this.setState({
+       vehiclesToDisplay: res.data
+     })
+    })
   }
 
   updatePrice(priceChange, id) {
     // axios (PUT)
     // setState with response -> vehiclesToDisplay
+    axios.put(`https://joes-autos.herokuapp.com/api/vehicles/${id}/${priceChange}`).then(res => {
+      this.setState({
+        vehiclesToDisplay: res.data.vehicles
+      })
+    })
   }
 
   addCar() {
@@ -73,6 +105,11 @@ class App extends Component {
 
     // axios (POST)
     // setState with response -> vehiclesToDisplay
+    axios.post("https://joes-autos.herokuapp.com/api/vehicles", newCar).then(res => {
+      this.setState({
+        vehiclesToDisplay: res.data.vehicles
+      })
+    })
   }
 
   addBuyer() {
@@ -84,11 +121,23 @@ class App extends Component {
 
     //axios (POST)
     // setState with response -> buyersToDisplay
+    axios.post("https://joes-autos.herokuapp.com/api/buyers", newBuyer).then(res => {
+      toast.success('Added Buyer')
+      this.setState({
+        buyersToDisplay: res.data.buyers
+      })
+    }).catch(err => toast.error('Could not retrieve buyers'))
   }
 
   deleteBuyer(id) {
     // axios (DELETE)
     //setState with response -> buyersToDisplay
+    axios.delete('https://joes-autos.herokuapp.com/api/buyers/${id}').then(res => {
+      toast.success('They bought a car!')
+      this.setState({
+        buyersToDisplay:res.data.buyers
+      })
+    })
   }
 
   nameSearch() {
@@ -96,6 +145,12 @@ class App extends Component {
 
     // axios (GET)
     // setState with response -> buyersToDisplay
+    axios.get(`https://joes-autos.herokuapp.com/api/buyers?name=${searchLetters}`).then(res => {
+      toast.success('Searched buyers by name!')
+      this.setState({
+        buyersToDisplay:res.data
+      })
+    }).catch(err => toast.error("Couldn't search for buyers"))
   }
 
   byYear() {
@@ -103,12 +158,17 @@ class App extends Component {
 
     // axios (GET)
     // setState with response -> vehiclesToDisplay
+    axios.get(`https://joes-autos.herokuapp.com/api/vehicles?year=${year}`).then(res => {
+      toast.success('Got vehicles by year')
+      this.setState({
+        vehiclesToDisplay: res.data
+      })
+     }).catch(err=> toast.error('Could not retrieve by year'))
   }
 
   // Do not edit the code below
   resetData(dataToReset) {
-    axios
-      .get('https://joes-autos.herokuapp.com/api/' + dataToReset + '/reset')
+    axios.get('https://joes-autos.herokuapp.com/api/' + dataToReset + '/reset')
       .then(res => {
         if (dataToReset === 'vehicles') {
           this.setState({ vehiclesToDisplay: res.data.vehicles });
